@@ -105,7 +105,7 @@ export class PedidosHandler {
       `Processando pedido ${msg.pedido} (simulação com delay de 1s)`,
     );
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000 * 10));
 
     // Regra simples para simular falha: qualquer id que contenha "fail" dá erro
     if (msg.pedido.toLowerCase().includes('fail')) {

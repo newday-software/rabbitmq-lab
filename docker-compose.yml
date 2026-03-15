@@ -1,0 +1,46 @@
+services:
+  # Banco de Dados Relacional
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Cache e Armazenamento In-Memory
+  # O Redis por padrão não usa usuário/senha no Docker básico, 
+  # mas adicionei o comando para exigir a senha "root".
+  redis:
+    image: redis:7-alpine
+    container_name: redis_cache
+    restart: always
+    command: redis-server --requirepass root
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  # Mensageria (Broker)
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq_broker
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: root
+      RABBITMQ_DEFAULT_PASS: root
+    ports:
+      - "5672:5672"   # AMQP
+      - "15672:15672" # Painel Web
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+volumes:
+  postgres_data:
+  redis_data:
+  rabbitmq_data:
